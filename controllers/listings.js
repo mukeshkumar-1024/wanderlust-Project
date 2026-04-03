@@ -1,6 +1,7 @@
 const Listing = require("../models/listing.js");
 const mbxGeocoding = require("@mapbox/mapbox-sdk/services/geocoding");
-const mapToken = process.env.MAP_BOX_TOKEN;
+// const mapToken = process.env.MAP_BOX_TOKEN;
+const mapToken = process.env.MAPBOX_TOKEN;
 const geocodingClient = mbxGeocoding({ accessToken: mapToken });
 
 //Index route(Find all listing).
@@ -70,7 +71,7 @@ module.exports.createNewListing = async (req, res) => {
 };
 
 module.exports.showListing = async (req, res) => {
-  console.log("MAP TOKEN:", process.env.MAP_BOX_TOKEN);
+  console.log("MAP TOKEN:", process.env.MAPBOX_TOKEN);
   let { id } = req.params;
   let listing = await Listing.findById(id)
     .populate({ path: "reviews", populate: { path: "author" } })
