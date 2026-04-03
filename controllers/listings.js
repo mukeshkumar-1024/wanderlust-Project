@@ -70,20 +70,23 @@ module.exports.createNewListing = async (req, res) => {
   res.redirect("/listings");
 };
 
+// controller fix (listings.js)
 module.exports.showListing = async (req, res) => {
-  console.log("MAP TOKEN:", process.env.MAPBOX_TOKEN);
   let { id } = req.params;
   let listing = await Listing.findById(id)
     .populate({ path: "reviews", populate: { path: "author" } })
     .populate("owner");
+
   if (!listing) {
-    req.flash("error", "Listign you requested for does not exist!");
+    req.flash("error", "Listing you requested for does not exist!");
     return res.redirect("/listings");
   }
-  // console.log(listing);
-  res.render("listings/show.ejs", { listing });
-};
 
+  res.render("listings/show.ejs", {
+    listing,
+    mapToken: process.env.MAPBOX_TOKEN,
+  });
+};
 module.exports.renderEditForm = async (req, res) => {
   let { id } = req.params;
   let listing = await Listing.findById(id);
