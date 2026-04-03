@@ -70,6 +70,7 @@ module.exports.createNewListing = async (req, res) => {
 };
 
 module.exports.showListing = async (req, res) => {
+  console.log("MAP TOKEN:", process.env.MAP_BOX_TOKEN);
   let { id } = req.params;
   let listing = await Listing.findById(id)
     .populate({ path: "reviews", populate: { path: "author" } })
