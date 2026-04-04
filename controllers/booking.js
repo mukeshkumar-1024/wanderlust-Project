@@ -1,7 +1,7 @@
 const Listing = require("../models/listing.js");
 const Booking = require("../models/booking.js");
 const sendBookingEmail = require("../utils/sendEmail.js");
-const generatePDF = require("../utils/  generatePDF.js");
+const generatePDF = require("../utils/generatePDF.js");
 
 module.exports.renderNewForm = async (req, res) => {
   let { id } = req.params;
@@ -17,11 +17,17 @@ module.exports.createBooking = async (req, res) => {
     return res.redirect("/listings");
   }
   const { checkIn, checkOut } = req.body.booking;
+  console.log(checkIn);
+  console.log(checkOut);
+
+  const checkInDate = new Date(checkIn);
+  const checkOutDate = new Date(checkOut);
+
+  console.log(checkInDate);
+  console.log(checkOutDate);
 
   // date validation
-  if (
-    new Date(req.body.booking.checkOut) <= new Date(req.body.booking.checkIn)
-  ) {
+  if (checkOutDate <= checkInDate) {
     req.flash(
       "error",
       "Invalid date range. Please ensure your check-out date is after your check-in date.!!",
@@ -32,8 +38,8 @@ module.exports.createBooking = async (req, res) => {
   const existingBookings = await Booking.find({
     listing: listing._id,
     status: "confirmed",
-    checkIn: { $lt: req.body.booking.checkOut },
-    checkOut: { $gt: req.body.booking.checkIn },
+    checkIn: { $lt: checkOutDate },
+    checkOut: { $gt: checkInDate },
   });
 
   if (existingBookings.length > 0) {
@@ -44,7 +50,7 @@ module.exports.createBooking = async (req, res) => {
     return res.redirect(`/listings/${listing._id}`);
   }
 
-  const days = (new Date(checkOut) - new Date(checkIn)) / (1000 * 60 * 60 * 24);
+  const days =(checkOutDate - checkInDate) / (1000 * 60 * 60 * 24);
   const price = days * listing.price;
 
   if (days <= 0) {
@@ -52,15 +58,25 @@ module.exports.createBooking = async (req, res) => {
     return res.redirect(`/listings/${id}`);
   }
 
+  // const newBooking = new Booking({
+  //   listing: listing._id,
+  //   user: req.user._id,
+  //   checkIn: checkIn,
+  //   checkOut: checkOut,
+  //   totalPrice: price,
+  // });
+
   const newBooking = new Booking({
     listing: listing._id,
     user: req.user._id,
-    checkIn: checkIn,
-    checkOut: checkOut,
+    checkIn: checkInDate,   
+    checkOut: checkOutDate, 
     totalPrice: price,
   });
 
   await newBooking.save();
+
+  console.log("Booking saved");
 
   req.flash("success", "Booking confirmed 🎉");
 
@@ -68,7 +84,16 @@ module.exports.createBooking = async (req, res) => {
   // const pdfPath = generatePDF(newBooking, listing, req.user);
 
   //Send Email
-  await sendBookingEmail(req.user, newBooking, listing);
+  // await sendBookingEmail(req.user, newBooking, listing);
+
+  try {
+    await sendBookingEmail(req.user, newBooking, listing);
+  } 
+  catch (err) {
+    console.log("Email error:", err.message);
+  }
+
+  console.log("Email sending...");
 
   // return res.redirect(`/listings/${id}`);
   return res.redirect(`/listings/${listing._id}/bookings/${newBooking._id}`);
