@@ -10,6 +10,26 @@ A full-stack accommodation listing and booking platform, in the spirit of Airbnb
 
 ---
 
+## Screenshots
+
+**Browse listings**
+
+![Listings page](docs/01-listings.png)
+
+**A listing, with reviews**
+
+![Listing detail](docs/02-listing-detail.png)
+
+**Location, geocoded with Mapbox**
+
+![Map on a listing](docs/03-map.png)
+
+**Sign up and log in**
+
+![Signup page](docs/04-signup.png)
+
+![Login page](docs/05-login.png)
+
 ## Features
 
 | Area | What it does |
