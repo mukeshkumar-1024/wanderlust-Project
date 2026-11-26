@@ -2,6 +2,10 @@
 
 A full-stack accommodation listing and booking platform, in the spirit of Airbnb. Users can browse stays, list their own, leave reviews, book a stay and download a PDF ticket. Admins get a dashboard to manage everything.
 
+**Live demo:** https://wanderlust-app-xh56.onrender.com/listings
+
+> Hosted on Render's free tier, which sleeps when idle — the first load can take up to a minute. After that it is quick.
+
 **Stack:** Node.js · Express 5 · MongoDB (Mongoose) · EJS · Passport.js · Cloudinary · Mapbox · PDFKit · Nodemailer
 
 ---
@@ -105,6 +109,9 @@ Issues and pull requests are welcome.
 
 MIT — see [LICENSE](LICENSE).
 
-## Author
+## Authors
 
-Mukesh Kumar — [GitHub](https://github.com/mukeshkumar-1024) · [LinkedIn](https://linkedin.com/in/mukesh-choudhary-64a9a4378)
+Built as a BCA final year project (2025-26) by:
+
+- **Mukesh Kumar Rar** — [GitHub](https://github.com/mukeshkumar-1024) · [LinkedIn](https://linkedin.com/in/mukesh-choudhary-64a9a4378)
+- **Nasir Husain Gouri**
